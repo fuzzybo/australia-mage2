@@ -33,6 +33,10 @@
 		{
             "type": "github",
             "url": "https://github.com/fuzzybo/auspost-api-php"
+        },
+		{
+            "type": "github",
+            "url": "https://github.com/fuzzybo/guzzle"
         }
     ]
 }
