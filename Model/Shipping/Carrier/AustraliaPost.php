@@ -157,9 +157,6 @@ class AustraliaPost extends AbstractCarrier implements CarrierInterface
             'weight' => $weight,
             'country_code' => $destCountry
         );
-echo '<pre>';
-var_dump($config);
-echo '</pre>';
 
         return $this->getQuotes($extraCover, $config, $client);
     }
