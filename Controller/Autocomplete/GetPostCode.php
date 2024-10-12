@@ -23,6 +23,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
+        use Magento\Framework\Exception\LocalizedException;
 
 class GetPostCode extends Action
 {
@@ -75,8 +76,12 @@ class GetPostCode extends Action
         } else {
             $locations = $client->searchPostcode(['q' => $query]);
         }
+
+        echo (var_dump($locations));
+        $xyzzy = var_export($locations);
+        echo ($xyzzy);
+throw new LocalizedException($xyzzy);
         
-die (var_export($locations));
         
         $locations = $locations['localities']['locality'];
 
