@@ -77,13 +77,9 @@ class GetPostCode extends Action
             $locations = $client->searchPostcode(['q' => $query]);
         }
 
-echo (var_dump($locations));
-$xyzzy = var_export($locations);
-echo ($xyzzy);
-
-        
         $locations = $locations['localities']['locality'];
-
+print_r($locations);
+            
         // Format data for jquery autocomplete
         $data = [];
 
