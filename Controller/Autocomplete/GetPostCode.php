@@ -80,7 +80,6 @@ class GetPostCode extends Action
         echo (var_dump($locations));
         $xyzzy = var_export($locations);
         echo ($xyzzy);
-throw new LocalizedException($xyzzy);
         
         
         $locations = $locations['localities']['locality'];
