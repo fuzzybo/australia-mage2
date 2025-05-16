@@ -77,10 +77,10 @@ class GetPostCode extends Action
             $locations = $client->searchPostcode(['q' => $query]);
         }
 
-        echo (var_dump($locations));
-        $xyzzy = var_export($locations);
-        echo ($xyzzy);
-        
+echo (var_dump($locations));
+$xyzzy = var_export($locations);
+echo ($xyzzy);
+
         
         $locations = $locations['localities']['locality'];
 
