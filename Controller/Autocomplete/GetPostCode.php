@@ -84,7 +84,9 @@ print_r($locations);
         $data = [];
 
         foreach ($locations as $location) {
-            if ($this->helper->shouldRemovePostOfficeBoxes()) {
+print_r($location);
+
+                if ($this->helper->shouldRemovePostOfficeBoxes()) {
                 // The Auspost API accepts an "excludepostboxflag" parameter, but it does not seem to affect
                 // the results. For the time being, we need to manually filter them out ourselves.
                 if ($location['category'] === 'Post Office Boxes') {
