@@ -78,18 +78,17 @@ class GetPostCode extends Action
         }
 
         $locations = $locations['localities']['locality'];
-print_r($locations);
-            
+print_r($locations)."\n***\n";
+print_r($locations['localities']."\n+++\n");
         // Format data for jquery autocomplete
         $data = [];
-
         foreach ($locations as $location) {
 print_r($location);
-
                 if ($this->helper->shouldRemovePostOfficeBoxes()) {
                 // The Auspost API accepts an "excludepostboxflag" parameter, but it does not seem to affect
                 // the results. For the time being, we need to manually filter them out ourselves.
-                if ($location['category'] === 'Post Office Boxes') {
+//                if ($location['category'] === 'Post Office Boxes') {
+                if ($location === 'Post Office Boxes') {
                     continue;
                 }
             }
