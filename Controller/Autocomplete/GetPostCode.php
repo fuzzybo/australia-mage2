@@ -89,7 +89,7 @@ print_r("\n-----\n");
                 // The Auspost API accepts an "excludepostboxflag" parameter, but it does not seem to affect
                 // the results. For the time being, we need to manually filter them out ourselves.
 //                if ($location['category'] === 'Post Office Boxes') {
-                if ($location === 'Post Office Boxes') {
+                if ($location['category'] === 'Post Office Boxes') {
                     continue;
                 }
             }
