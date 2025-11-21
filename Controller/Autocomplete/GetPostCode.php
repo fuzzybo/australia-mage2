@@ -23,7 +23,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
-        use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
 
 class GetPostCode extends Action
 {
@@ -77,7 +77,11 @@ class GetPostCode extends Action
             $locations = $client->searchPostcode(['q' => $query]);
         }
 
-var_dump($locations);
+$writer = new \Laminas\Log\Writer\Stream(BP . '/var/log/fuzzy.log');
+$logger = new \Laminas\Log\Logger();
+$logger->addWriter($writer);
+$logger->info(print_r($locations),true);
+//var_dump($locations);
         $locations = $locations['localities']['locality'];
 //print_r("\n***\n");
         // Format data for jquery autocomplete
