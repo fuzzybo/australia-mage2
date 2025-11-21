@@ -24,6 +24,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
+    use Laminas\Log\Writer\Stream;
+    use Laminas\Log\Logger;
 
 class GetPostCode extends Action
 {
@@ -77,8 +79,8 @@ class GetPostCode extends Action
             $locations = $client->searchPostcode(['q' => $query]);
         }
 
-$writer = new \Laminas\Log\Writer\Stream(BP . '/var/log/fuzzy.log');
-$logger = new \Laminas\Log\Logger();
+$writer = new Stream('/var/log/fuzzy.log');
+$logger = new Logger();
 $logger->addWriter($writer);
 $logger->info(print_r($locations),true);
 //var_dump($locations);
