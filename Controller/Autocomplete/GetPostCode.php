@@ -77,7 +77,7 @@ class GetPostCode extends Action
             $locations = $client->searchPostcode(['q' => $query]);
         }
 
-\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',var_dump($locations));
+\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',printf($locations));
         //var_dump($locations);
         $locations = $locations['localities']['locality'];
 //print_r("\n***\n");
