@@ -82,7 +82,7 @@ class GetPostCode extends Action
 $writer = new Stream('/var/log/fuzzy.log');
 $logger = new Logger();
 $logger->addWriter($writer);
-$logger->info(print_r($locations),true);
+$logger->info("hello",$locations);
 //var_dump($locations);
         $locations = $locations['localities']['locality'];
 //print_r("\n***\n");
