@@ -76,8 +76,15 @@ class GetPostCode extends Action
         } else {
             $locations = $client->searchPostcode(['q' => $query]);
         }
-\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"--locations=".var_dump($locations)."--");
-\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"--empty=".empty($locations)."--");
+//    \Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"--locations=".var_dump($locations)."--");
+\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"--query=".$query."--");
+        if (empty($locations))
+        {
+            $result = $this->resultJsonFactory->create();
+
+        }
+        else
+        {
         $locations = $locations['localities']['locality'];
         // Format data for jquery autocomplete
         $data = [];
@@ -121,7 +128,7 @@ class GetPostCode extends Action
         // Prepare output content
         $result = $this->resultJsonFactory->create();
         $result->setData($sortedLocations);
-
+        }
         return $result;
     }
 }
