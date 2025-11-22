@@ -70,31 +70,29 @@ class GetPostCode extends Action
 
         $query = $this->getRequest()->get("term");
         $client = Auspost::factory(['auth_key' => $this->helper->getAPIKey()])->get('postage');
-//    20251122 log the query, skip when no locations are available
+//    20251122 log the query
 \Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"query='".$query."'");
         if ($this->helper->shouldRemovePostOfficeBoxes()) {
             $locations = $client->searchPostcode(['q' => $query, 'excludepostboxflag' => true]);
         } else {
             $locations = $client->searchPostcode(['q' => $query]);
         }
-
-        if (empty($locations))
-        {
+//    20251122 skip when no locations are available
+        if (empty($locations)) {
             $result = $this->resultJsonFactory->create();
         }
-        else
-        {
+        else {
             $locations = $locations['localities']['locality'];
             // Format data for jquery autocomplete
             $data = [];
             foreach ($locations as $location) {
-                    if ($this->helper->shouldRemovePostOfficeBoxes()) {
-                    // The Auspost API accepts an "excludepostboxflag" parameter, but it does not seem to affect
-                    // the results. For the time being, we need to manually filter them out ourselves.
-                    if ($location['category'] === 'Post Office Boxes') {
-                        continue;
-                    }
+                if ($this->helper->shouldRemovePostOfficeBoxes()) {
+                // The Auspost API accepts an "excludepostboxflag" parameter, but it does not seem to affect
+                // the results. For the time being, we need to manually filter them out ourselves.
+                if ($location['category'] === 'Post Office Boxes') {
+                    continue;
                 }
+            }
     
                 $data[] = [
                     "id" => $location['id'],
