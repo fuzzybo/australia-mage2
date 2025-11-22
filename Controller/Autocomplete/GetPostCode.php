@@ -70,14 +70,14 @@ class GetPostCode extends Action
 
         $query = $this->getRequest()->get("term");
         $client = Auspost::factory(['auth_key' => $this->helper->getAPIKey()])->get('postage');
-
+//    20251122 log the query, skip when no locations are available
+\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"query='".$query."'");
         if ($this->helper->shouldRemovePostOfficeBoxes()) {
             $locations = $client->searchPostcode(['q' => $query, 'excludepostboxflag' => true]);
         } else {
             $locations = $client->searchPostcode(['q' => $query]);
         }
-//    20251122 log the query, skip when no locations are available
-\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"query='".$query."'");
+
         if (empty($locations))
         {
             $result = $this->resultJsonFactory->create();
