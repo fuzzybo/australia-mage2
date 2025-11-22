@@ -76,58 +76,57 @@ class GetPostCode extends Action
         } else {
             $locations = $client->searchPostcode(['q' => $query]);
         }
-//    \Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"--locations=".var_dump($locations)."--");
-\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"--query=".$query."--");
+//    20251122 log the query, skip when no locations are available
+\Magento\Framework\App\ObjectManager::getInstance()->get('Psr\Log\LoggerInterface')->log('info',"query='".$query."'");
         if (empty($locations))
         {
             $result = $this->resultJsonFactory->create();
-
         }
         else
         {
-        $locations = $locations['localities']['locality'];
-        // Format data for jquery autocomplete
-        $data = [];
-        foreach ($locations as $location) {
-                if ($this->helper->shouldRemovePostOfficeBoxes()) {
-                // The Auspost API accepts an "excludepostboxflag" parameter, but it does not seem to affect
-                // the results. For the time being, we need to manually filter them out ourselves.
-                if ($location['category'] === 'Post Office Boxes') {
-                    continue;
+            $locations = $locations['localities']['locality'];
+            // Format data for jquery autocomplete
+            $data = [];
+            foreach ($locations as $location) {
+                    if ($this->helper->shouldRemovePostOfficeBoxes()) {
+                    // The Auspost API accepts an "excludepostboxflag" parameter, but it does not seem to affect
+                    // the results. For the time being, we need to manually filter them out ourselves.
+                    if ($location['category'] === 'Post Office Boxes') {
+                        continue;
+                    }
                 }
+    
+                $data[] = [
+                    "id" => $location['id'],
+                    "label" => $location['location'] . ' ' . $location['state'] . " (" . $location['postcode'] . ")",
+                    "value" => $location['location'],
+                    "postcode" => $location['postcode'],
+                ];
             }
-
-            $data[] = [
-                "id" => $location['id'],
-                "label" => $location['location'] . ' ' . $location['state'] . " (" . $location['postcode'] . ")",
-                "value" => $location['location'],
-                "postcode" => $location['postcode'],
-            ];
-        }
-
-        // The order of results returned from API not really match the search keyword
-        // eg: it will returns North Sydney before Sydney when we search for "Sydn".
-        // So we will use the Levenshtein metric to sort the results so that
-        // the best matched results will be ordered first.
-        $tempArr = [];
-
-        for ($i = 0; $i < count($data); $i++) {
-            $tempArr[$i] = levenshtein($query, $data[$i]['label']);
-        }
-
-        asort($tempArr);
-        $sortedLocations = [];
-
-        foreach ($tempArr as $k => $v) {
-            $sortedLocations[] = $data[$k];
-        }
-
-        // Limit results size by system configuration
-        $sortedLocations = array_slice($sortedLocations, 0, $this->helper->getPostcodeAutocompleteMaxResultCount());
-
-        // Prepare output content
-        $result = $this->resultJsonFactory->create();
-        $result->setData($sortedLocations);
+    
+            // The order of results returned from API not really match the search keyword
+            // eg: it will returns North Sydney before Sydney when we search for "Sydn".
+            // So we will use the Levenshtein metric to sort the results so that
+            // the best matched results will be ordered first.
+            $tempArr = [];
+    
+            for ($i = 0; $i < count($data); $i++) {
+                $tempArr[$i] = levenshtein($query, $data[$i]['label']);
+            }
+    
+            asort($tempArr);
+            $sortedLocations = [];
+    
+            foreach ($tempArr as $k => $v) {
+                $sortedLocations[] = $data[$k];
+            }
+    
+            // Limit results size by system configuration
+            $sortedLocations = array_slice($sortedLocations, 0, $this->helper->getPostcodeAutocompleteMaxResultCount());
+    
+            // Prepare output content
+            $result = $this->resultJsonFactory->create();
+            $result->setData($sortedLocations);
         }
         return $result;
     }
